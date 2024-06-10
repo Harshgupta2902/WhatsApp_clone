@@ -100,11 +100,8 @@ class IsarDb {
     Attachment? attachment,
   }) async {
     await isar.writeTxn(() async {
-      StoredMessage? msg = await isar.storedMessages
-          .filter()
-          .messageIdEqualTo(messageId)
-          .build()
-          .findFirst();
+      StoredMessage? msg =
+          await isar.storedMessages.filter().messageIdEqualTo(messageId).build().findFirst();
 
       if (msg == null) return;
 
@@ -194,19 +191,15 @@ class IsarDb {
 
         Contact? contact;
         if (sender != null) {
-          contact = await ref
-              .read(contactsRepositoryProvider)
-              .getContactByPhone(sender.phone.number!);
+          contact =
+              await ref.read(contactsRepositoryProvider).getContactByPhone(sender.phone.number!);
         }
 
-        sender ??= await ref
-            .read(firebaseFirestoreRepositoryProvider)
-            .getUserById(
+        sender ??= await ref.read(firebaseFirestoreRepositoryProvider).getUserById(
               msg.senderId == currentUser.id ? msg.receiverId : msg.senderId,
             );
 
-        final senderName =
-            contact?.displayName ?? sender!.phone.formattedNumber;
+        final senderName = contact?.displayName ?? sender!.phone.formattedNumber;
 
         recentChats.add(
           RecentChat(
@@ -237,13 +230,11 @@ class IsarDb {
           ),
         );
 
-        visitedChats[msg.chatId] =
-            clientIsSender || msg.status == MessageStatus.seen ? 0 : 1;
+        visitedChats[msg.chatId] = clientIsSender || msg.status == MessageStatus.seen ? 0 : 1;
       }
 
       for (final chat in recentChats) {
-        chat.unreadCount = visitedChats[
-            getChatId(chat.message.senderId, chat.message.receiverId)]!;
+        chat.unreadCount = visitedChats[getChatId(chat.message.senderId, chat.message.receiverId)]!;
       }
 
       return recentChats;
@@ -254,9 +245,7 @@ class IsarDb {
     final providerContainer = ProviderContainer();
     final self = getCurrentUser()!;
 
-    var contacts = await providerContainer
-        .read(contactsRepositoryProvider)
-        .getContacts(self: self);
+    var contacts = await providerContainer.read(contactsRepositoryProvider).getContacts(self: self);
 
     final users = await Future.wait(
       contacts.map(

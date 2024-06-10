@@ -116,7 +116,6 @@ final _theme = ThemeData(
     indicatorSize: TabBarIndicatorSize.tab,
     labelColor: AppColorsLight.selectedLabelColor,
     unselectedLabelColor: AppColorsLight.unselectedLabelColor,
-    dividerHeight: 0,
   ),
 );
 
@@ -170,7 +169,6 @@ final _darkTheme = ThemeData(
     indicatorSize: TabBarIndicatorSize.tab,
     labelColor: AppColorsDark.selectedLabelColor,
     unselectedLabelColor: AppColorsDark.unselectedLabelColor,
-    dividerHeight: 0,
   ),
 );
 

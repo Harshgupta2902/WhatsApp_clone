@@ -47,9 +47,11 @@ class ChatPage extends ConsumerStatefulWidget {
 class _ChatPageState extends ConsumerState<ChatPage> {
   @override
   void initState() {
-    ref
-        .read(chatControllerProvider.notifier)
-        .initUsers(widget.self, widget.other, widget.otherUserContactName);
+    ref.read(chatControllerProvider.notifier).initUsers(
+          widget.self,
+          widget.other,
+          widget.otherUserContactName,
+        );
     super.initState();
   }
 
@@ -58,22 +60,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
     final self = widget.self;
     final other = widget.other;
 
-    return Platform.isAndroid
-        ? PopScope(
-            canPop: false,
-            onPopInvoked: (didPop) async {
-              if (!ref.read(chatControllerProvider).showEmojiPicker) {
-                Navigator.pop(context);
-                return;
-              }
-
-              ref
-                  .read(chatControllerProvider.notifier)
-                  .setShowEmojiPicker(false);
-            },
-            child: _build(self, other, context),
-          )
-        : _build(self, other, context);
+    return Platform.isAndroid ? _build(self, other, context) : _build(self, other, context);
   }
 
   Widget _build(User self, User other, BuildContext context) {
@@ -124,8 +111,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
         ),
         leadingWidth: 36.0,
         leading: IconButton(
-          onPressed: () =>
-              ref.read(chatControllerProvider.notifier).navigateToHome(context),
+          onPressed: () => ref.read(chatControllerProvider.notifier).navigateToHome(context),
           icon: const Icon(
             Icons.arrow_back,
             size: 24,
@@ -133,8 +119,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
         ),
         actions: [
           IconButton(
-            onPressed:
-                recordingState == RecordingState.notRecording ? () {} : null,
+            onPressed: recordingState == RecordingState.notRecording ? () {} : null,
             icon: const Icon(
               Icons.videocam_rounded,
               size: 28,
@@ -142,8 +127,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
             ),
           ),
           IconButton(
-            onPressed:
-                recordingState == RecordingState.notRecording ? () {} : null,
+            onPressed: recordingState == RecordingState.notRecording ? () {} : null,
             icon: const Icon(
               Icons.call,
               color: Colors.white,
@@ -176,9 +160,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                         SystemChannels.textInput.invokeMethod(
                           "TextInput.hide",
                         );
-                        ref
-                            .read(chatControllerProvider.notifier)
-                            .setShowEmojiPicker(false);
+                        ref.read(chatControllerProvider.notifier).setShowEmojiPicker(false);
                       },
                       child: const ChatStream(),
                     )
@@ -221,8 +203,7 @@ class _ChatInputContainerState extends ConsumerState<ChatInputContainer>
   @override
   void initState() {
     ref.read(chatControllerProvider.notifier).initRecorder();
-    _keyboardSubscription =
-        KeyboardVisibilityController().onChange.listen((isVisible) async {
+    _keyboardSubscription = KeyboardVisibilityController().onChange.listen((isVisible) async {
       isKeyboardVisible = isVisible;
       if (isVisible) {
         ref.read(chatControllerProvider.notifier).setShowEmojiPicker(false);
@@ -283,9 +264,8 @@ class _ChatInputContainerState extends ConsumerState<ChatInputContainer>
         offstage: Offstage(
           offstage: !showEmojiPicker,
           child: CustomEmojiPicker(
-            afterEmojiPlaced: (emoji) => ref
-                .read(chatControllerProvider.notifier)
-                .onTextChanged(emoji.emoji),
+            afterEmojiPlaced: (emoji) =>
+                ref.read(chatControllerProvider.notifier).onTextChanged(emoji.emoji),
             textController: ref.read(chatControllerProvider).messageController,
           ),
         ),
@@ -320,9 +300,7 @@ class _ChatInputContainerState extends ConsumerState<ChatInputContainer>
                     hideElements
                         ? InkWell(
                             onTap: () async {
-                              ref
-                                  .read(chatControllerProvider.notifier)
-                                  .onSendBtnPressed(
+                              ref.read(chatControllerProvider.notifier).onSendBtnPressed(
                                     ref,
                                     widget.self,
                                     widget.other,
@@ -346,8 +324,12 @@ class _ChatInputContainerState extends ConsumerState<ChatInputContainer>
     );
   }
 
-  ChatField _buildChatField(bool showEmojiPicker, BuildContext context,
-      bool hideElements, ColorTheme colorTheme) {
+  ChatField _buildChatField(
+    bool showEmojiPicker,
+    BuildContext context,
+    bool hideElements,
+    ColorTheme colorTheme,
+  ) {
     return ChatField(
         leading: GestureDetector(
           onTap: switchKeyboards,
@@ -357,8 +339,7 @@ class _ChatInputContainerState extends ConsumerState<ChatInputContainer>
           ),
         ),
         focusNode: ref.read(chatControllerProvider).fieldFocusNode,
-        onTextChanged: (value) =>
-            ref.read(chatControllerProvider.notifier).onTextChanged(value),
+        onTextChanged: (value) => ref.read(chatControllerProvider.notifier).onTextChanged(value),
         textController: ref.read(chatControllerProvider).messageController,
         actions: [
           InkWell(
@@ -436,9 +417,7 @@ class _ChatInputContainerState extends ConsumerState<ChatInputContainer>
               alignment: Alignment.bottomCenter,
               insetPadding: EdgeInsets.symmetric(
                 horizontal: 10.0,
-                vertical: ref.read(chatControllerProvider).showEmojiPicker
-                    ? 36.0
-                    : 56.0,
+                vertical: ref.read(chatControllerProvider).showEmojiPicker ? 36.0 : 56.0,
               ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16.0),
@@ -636,9 +615,7 @@ class _ChatStreamState extends ConsumerState<ChatStream> {
                         '🔒Messages and calls are end-to-end encrypted. No one outside this chat, not even WhatsApp, can read or listen to them. Tap to learn more.',
                         style: TextStyle(
                           fontSize: 13,
-                          color: isDarkTheme
-                              ? colorTheme.yellowColor
-                              : colorTheme.textColor1,
+                          color: isDarkTheme ? colorTheme.yellowColor : colorTheme.textColor1,
                         ),
                         softWrap: true,
                         textWidthBasis: TextWidthBasis.longestLine,
@@ -650,9 +627,7 @@ class _ChatStreamState extends ConsumerState<ChatStream> {
                 SliverToBoxAdapter(
                   child: Center(
                     child: ChatDate(
-                      date: messages.isEmpty
-                          ? 'Today'
-                          : dateFromTimestamp(messages.last.timestamp),
+                      date: messages.isEmpty ? 'Today' : dateFromTimestamp(messages.last.timestamp),
                     ),
                   ),
                 ),
@@ -671,11 +646,9 @@ class _ChatStreamState extends ConsumerState<ChatStream> {
   Widget buildMessageCard(int index, List<Message> messages) {
     final message = messages[index];
     final isFirstMsg = index == messages.length - 1;
-    final isSpecial =
-        isFirstMsg || messages[index].senderId != messages[index + 1].senderId;
+    final isSpecial = isFirstMsg || messages[index].senderId != messages[index + 1].senderId;
     final currMsgDate = dateFromTimestamp(messages[index].timestamp);
-    final showDate = isFirstMsg ||
-        currMsgDate != dateFromTimestamp(messages[index + 1].timestamp);
+    final showDate = isFirstMsg || currMsgDate != dateFromTimestamp(messages[index + 1].timestamp);
 
     return Column(
       key: ValueKey(message.id),

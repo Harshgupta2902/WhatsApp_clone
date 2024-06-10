@@ -40,13 +40,11 @@ class _HomePageState extends ConsumerState<HomePage>
     switch (state) {
       case AppLifecycleState.resumed:
         ref.read(firebaseFirestoreRepositoryProvider).setActivityStatus(
-            userId: widget.user.id,
-            statusValue: UserActivityStatus.online.value);
+            userId: widget.user.id, statusValue: UserActivityStatus.online.value);
         break;
       default:
         ref.read(firebaseFirestoreRepositoryProvider).setActivityStatus(
-            userId: widget.user.id,
-            statusValue: UserActivityStatus.offline.value);
+            userId: widget.user.id, statusValue: UserActivityStatus.offline.value);
         break;
     }
     super.didChangeAppLifecycleState(state);
@@ -163,13 +161,11 @@ class _HomePageState extends ConsumerState<HomePage>
   }
 
   Future<void> handleNotificationClick(RemoteMessage message) async {
-    final author = await ref
-        .read(firebaseFirestoreRepositoryProvider)
-        .getUserById(message.data['authorId']);
+    final author =
+        await ref.read(firebaseFirestoreRepositoryProvider).getUserById(message.data['authorId']);
 
-    final contact = await ref
-        .read(contactsRepositoryProvider)
-        .getContactByPhone(author!.phone.number!);
+    final contact =
+        await ref.read(contactsRepositoryProvider).getContactByPhone(author!.phone.number!);
 
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
@@ -177,8 +173,7 @@ class _HomePageState extends ConsumerState<HomePage>
         builder: (context) => ChatPage(
           self: widget.user,
           other: author,
-          otherUserContactName:
-              contact?.displayName ?? author.phone.getFormattedNumber(),
+          otherUserContactName: contact?.displayName ?? author.phone.getFormattedNumber(),
         ),
       ),
       (route) => route.settings.name == "/",
@@ -378,8 +373,7 @@ class HomePageContactsList extends StatelessWidget {
         final descriptionList = <String>['', ''];
         if (userCount > 3) {
           descriptionList[0] = users.getRange(0, 3).join(', ');
-          descriptionList[1] =
-              ' and ${userCount - 3} more of your contacts\n are on WhatsApp';
+          descriptionList[1] = ' and ${userCount - 3} more of your contacts\n are on WhatsApp';
         } else if (userCount > 2) {
           descriptionList[0] = users.getRange(0, 2).join(', ');
           descriptionList[1] = ' and ${users[2]} are on WhatsApp';
@@ -416,8 +410,7 @@ class HomePageContactsList extends StatelessWidget {
                               ? CachedNetworkImageProvider(
                                   users[i].avatarUrl!,
                                 )
-                              : const AssetImage('assets/images/avatar.png')
-                                  as ImageProvider,
+                              : const AssetImage('assets/images/avatar.png') as ImageProvider,
                         ),
                       ),
                     )
@@ -517,11 +510,8 @@ class RecentChatWidget extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: Theme.of(context)
-            .custom
-            .textTheme
-            .titleMedium
-            .copyWith(color: colorTheme.textColor1),
+        style:
+            Theme.of(context).custom.textTheme.titleMedium.copyWith(color: colorTheme.textColor1),
       ),
       subtitle: Row(
         children: [

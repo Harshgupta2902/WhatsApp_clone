@@ -496,120 +496,107 @@ class _AlbumViewState extends ConsumerState<AlbumView> {
               ],
             ),
       backgroundColor: colorTheme.backgroundColor,
-      body: PopScope(
-        canPop: false,
-        onPopInvoked: (didPop) {
-          if (canSelect) {
-            ref.read(galleryStateProvider.notifier).toggleCanSelect();
-            return;
-          }
+      body: SafeArea(
+        child: Column(
+          children: [
+            widget.album != null
+                ? FutureBuilder(
+              future: _assetsFuture,
+              builder: (context, snap) {
+                if (snap.connectionState == ConnectionState.waiting) {
+                  return Container();
+                }
 
-          if (!didPop) {
-            Navigator.pop(context);
-          }
-        },
-        child: SafeArea(
-          child: Column(
-            children: [
-              widget.album != null
-                  ? FutureBuilder(
-                      future: _assetsFuture,
-                      builder: (context, snap) {
-                        if (snap.connectionState == ConnectionState.waiting) {
-                          return Container();
-                        }
-
-                        return Expanded(
-                          child: GridView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            controller: _scrollController,
-                            shrinkWrap: true,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              mainAxisSpacing: 2,
-                              crossAxisSpacing: 2,
-                            ),
-                            itemCount: _assets.length,
-                            itemBuilder: (context, index) {
-                              if (index >= _assets.length) {
-                                return Container(
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? AppColorsDark.appBarColor
-                                      : const Color.fromARGB(
-                                          172, 231, 231, 231),
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                );
-                              }
-                              return AlbumItem(
-                                assetWrapper: _assets[index],
-                              );
-                            },
-                          ),
+                return Expanded(
+                  child: GridView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    controller: _scrollController,
+                    shrinkWrap: true,
+                    gridDelegate:
+                    const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 2,
+                      crossAxisSpacing: 2,
+                    ),
+                    itemCount: _assets.length,
+                    itemBuilder: (context, index) {
+                      if (index >= _assets.length) {
+                        return Container(
+                          color: Theme.of(context).brightness ==
+                              Brightness.dark
+                              ? AppColorsDark.appBarColor
+                              : const Color.fromARGB(
+                              172, 231, 231, 231),
+                          width: double.infinity,
+                          height: double.infinity,
                         );
-                      },
-                    )
-                  : Container(),
-              if (showSelectedAssets)
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    color: Theme.of(context).custom.colorTheme.appBarColor,
-                    height: 60,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: selectedAssets.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                key: ValueKey(selectedAssets[index].asset.id),
-                                padding: const EdgeInsets.only(right: 10.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(4),
-                                  child: SizedBox(
-                                    width: 40,
-                                    height: 40,
-                                    child: FadeInThumbnail(
-                                      thumbnail:
-                                          selectedAssets[index].thumbnail,
-                                    ),
+                      }
+                      return AlbumItem(
+                        assetWrapper: _assets[index],
+                      );
+                    },
+                  ),
+                );
+              },
+            )
+                : Container(),
+            if (showSelectedAssets)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  color: Theme.of(context).custom.colorTheme.appBarColor,
+                  height: 60,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: selectedAssets.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              key: ValueKey(selectedAssets[index].asset.id),
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                child: SizedBox(
+                                  width: 40,
+                                  height: 40,
+                                  child: FadeInThumbnail(
+                                    thumbnail:
+                                    selectedAssets[index].thumbnail,
                                   ),
                                 ),
-                              );
-                            },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () => ref
+                            .read(galleryStateProvider.notifier)
+                            .prepareAttachments(
+                          context,
+                          ref,
+                          selectedAssets,
+                        ),
+                        child: CircleAvatar(
+                          radius: 24,
+                          backgroundColor:
+                          Theme.of(context).custom.colorTheme.greenColor,
+                          child: const Icon(
+                            Icons.check,
+                            color: Colors.white,
                           ),
                         ),
-                        InkWell(
-                          onTap: () => ref
-                              .read(galleryStateProvider.notifier)
-                              .prepareAttachments(
-                                context,
-                                ref,
-                                selectedAssets,
-                              ),
-                          child: CircleAvatar(
-                            radius: 24,
-                            backgroundColor:
-                                Theme.of(context).custom.colorTheme.greenColor,
-                            child: const Icon(
-                              Icons.check,
-                              color: Colors.white,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
-                )
-            ],
-          ),
+                ),
+              )
+          ],
         ),
       ),
     );

@@ -11,17 +11,19 @@ import 'package:whatsapp_clone/shared/utils/storage_paths.dart';
 import 'features/auth/views/welcome.dart';
 
 import 'features/home/views/base.dart';
-import 'firebase_options.dart';
 
 import 'package:whatsapp_clone/theme/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyD09I9S2NOSF6eXdZP3iKU45MW15z7aLwM",
+      appId: "1:125385748326:android:2bcfe805e39c131aaf62a7",
+      messagingSenderId: "125385748326",
+      projectId: "whatsapp-7dd62",
+    ),
   );
-
   await SharedPref.init();
   await IsarDb.init();
   await DeviceStorage.init();

@@ -29,12 +29,10 @@ class PushNotificationsRepo {
   }
 
   Future<void> sendPushNotification(Message message) async {
-    final token = await ref
-        .read(firebaseFirestoreRepositoryProvider)
-        .getFcmToken(message.receiverId);
+    final token =
+        await ref.read(firebaseFirestoreRepositoryProvider).getFcmToken(message.receiverId);
 
-    const String url =
-        'https://wa_notifications-1-q2097095.deta.app/new_message';
+    const String url = 'https://wa_notifications-1-q2097095.deta.app/new_message';
     final Map<String, String> headers = {"Content-Type": "application/json"};
 
     String messageContent = message.content;
@@ -65,9 +63,7 @@ Future<void> _handleBackgroundMessage(RemoteMessage message) async {
   await Firebase.initializeApp();
   final data = message.data;
 
-  await ProviderContainer()
-      .read(firebaseFirestoreRepositoryProvider)
-      .sendSystemMessage(
+  await ProviderContainer().read(firebaseFirestoreRepositoryProvider).sendSystemMessage(
         message: SystemMessage(
           targetId: data['messageId'],
           action: MessageAction.statusUpdate,

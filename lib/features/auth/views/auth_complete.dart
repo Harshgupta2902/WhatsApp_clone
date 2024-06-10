@@ -29,8 +29,7 @@ class _AuthCompletePageState extends ConsumerState<AuthCompletePage> {
 
       if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => HomePage(user: widget.user)),
-          (route) => false);
+          MaterialPageRoute(builder: (context) => HomePage(user: widget.user)), (route) => false);
     });
 
     super.initState();

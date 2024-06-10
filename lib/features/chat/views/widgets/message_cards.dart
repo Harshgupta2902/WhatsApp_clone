@@ -26,8 +26,7 @@ class MessageCard extends StatefulWidget {
   State<MessageCard> createState() => _MessageCardState();
 }
 
-class _MessageCardState extends State<MessageCard>
-    with AutomaticKeepAliveClientMixin {
+class _MessageCardState extends State<MessageCard> with AutomaticKeepAliveClientMixin {
   bool shouldHaveBiggerFont(String text) {
     final x = EmojiParser().parseEmojis(text);
     return text.runes.length == x.length;
@@ -47,9 +46,7 @@ class _MessageCardState extends State<MessageCard>
     final messageHasText = widget.message.content.isNotEmpty;
 
     final showTimeStamp = !hasAttachment ||
-        (hasAttachment &&
-            attachmentType == AttachmentType.audio &&
-            messageHasText) ||
+        (hasAttachment && attachmentType == AttachmentType.audio && messageHasText) ||
         ((hasAttachment && attachmentType != AttachmentType.audio) &&
             (hasAttachment && attachmentType != AttachmentType.voice));
 
@@ -58,17 +55,15 @@ class _MessageCardState extends State<MessageCard>
 
     if (!biggerFont) {
       if (isSentMessageCard) {
-        padding = Platform.isAndroid
-            ? (widget.special ? 13 : 12)
-            : (widget.special ? 17 : 16);
+        padding = Platform.isAndroid ? (widget.special ? 13 : 12) : (widget.special ? 17 : 16);
       } else {
         padding = Platform.isAndroid ? 8 : 12;
       }
     }
 
     final textPadding = '\u00A0' * padding;
-    final hasImageOrVideo = attachmentType == AttachmentType.image ||
-        attachmentType == AttachmentType.video;
+    final hasImageOrVideo =
+        attachmentType == AttachmentType.image || attachmentType == AttachmentType.video;
     final maxWidth = MediaQuery.of(context).size.width * 0.80;
     final maxHeight = MediaQuery.of(context).size.height * 0.40;
     final minWidth = 0.8 * maxWidth;
@@ -86,19 +81,14 @@ class _MessageCardState extends State<MessageCard>
     }
 
     return Align(
-      alignment:
-          isSentMessageCard ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: isSentMessageCard ? Alignment.centerRight : Alignment.centerLeft,
       child: ClipPath(
-        clipper: widget.special
-            ? TriangleClipper(isSender: isSentMessageCard)
-            : null,
+        clipper: widget.special ? TriangleClipper(isSender: isSentMessageCard) : null,
         child: Container(
           constraints: BoxConstraints(
             minHeight: 34,
             minWidth: widget.special ? (isSentMessageCard ? 98 : 76) : 60,
-            maxWidth: hasImageOrVideo
-                ? width
-                : size.width * 0.80 + (widget.special ? 10 : 0),
+            maxWidth: hasImageOrVideo ? width : size.width * 0.80 + (widget.special ? 10 : 0),
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.only(
@@ -142,66 +132,61 @@ class _MessageCardState extends State<MessageCard>
           child: Stack(
             alignment: Alignment.centerLeft,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (hasAttachment) ...[
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxHeight:
-                            height < width ? 0.65 * width : double.infinity,
+              Flexible(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (hasAttachment) ...[
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight: height < width ? 0.65 * width : double.infinity,
+                        ),
+                        child: AttachmentPreview(
+                          message: widget.message,
+                          width: width,
+                          height: height,
+                        ),
                       ),
-                      child: AttachmentPreview(
-                        message: widget.message,
-                        width: width,
-                        height: height,
-                      ),
-                    ),
+                    ],
+                    if (messageHasText) ...[
+                      Padding(
+                        padding: hasAttachment
+                            ? const EdgeInsets.only(left: 4.0, top: 4.0)
+                            : widget.special && !isSentMessageCard
+                                ? EdgeInsets.only(
+                                    left: 10,
+                                    top: 4,
+                                    bottom: biggerFont
+                                        ? 12
+                                        : padding == 0
+                                            ? 14.0
+                                            : 0,
+                                  )
+                                : EdgeInsets.only(
+                                    top: 2.0,
+                                    bottom: biggerFont
+                                        ? (Platform.isAndroid ? 16.0 : 12.0)
+                                        : padding == 0
+                                            ? 14.0
+                                            : 0,
+                                  ),
+                        child: Text(
+                          '${widget.message.content} $textPadding',
+                          textWidthBasis: TextWidthBasis.longestLine,
+                          style: Theme.of(context).custom.textTheme.bodyText1.copyWith(
+                                fontSize: biggerFont ? 40 : 16,
+                                color: colorTheme.textColor1,
+                              ),
+                          softWrap: true,
+                        ),
+                      )
+                    ],
                   ],
-                  if (messageHasText) ...[
-                    Padding(
-                      padding: hasAttachment
-                          ? const EdgeInsets.only(left: 4.0, top: 4.0)
-                          : widget.special && !isSentMessageCard
-                              ? EdgeInsets.only(
-                                  left: 10,
-                                  top: 4,
-                                  bottom: biggerFont
-                                      ? 12
-                                      : padding == 0
-                                          ? 14.0
-                                          : 0,
-                                )
-                              : EdgeInsets.only(
-                                  top: 2.0,
-                                  bottom: biggerFont
-                                      ? (Platform.isAndroid ? 16.0 : 12.0)
-                                      : padding == 0
-                                          ? 14.0
-                                          : 0,
-                                ),
-                      child: Text(
-                        '${widget.message.content} $textPadding',
-                        textWidthBasis: TextWidthBasis.longestLine,
-                        style: Theme.of(context)
-                            .custom
-                            .textTheme
-                            .bodyText1
-                            .copyWith(
-                              fontSize: biggerFont ? 40 : 16,
-                              color: colorTheme.textColor1,
-                            ),
-                        softWrap: true,
-                      ),
-                    )
-                  ],
-                ],
+                ),
               ),
               Positioned(
-                right: widget.special && isSentMessageCard && messageHasText
-                    ? -6
-                    : 0,
+                right: widget.special && isSentMessageCard && messageHasText ? -6 : 0,
                 bottom: -1,
                 child: Container(
                   decoration: BoxDecoration(
@@ -218,19 +203,16 @@ class _MessageCardState extends State<MessageCard>
                       ],
                     ],
                   ),
-                  margin: !messageHasText &&
-                          hasAttachment &&
-                          attachmentType != AttachmentType.audio
+                  margin: !messageHasText && hasAttachment && attachmentType != AttachmentType.audio
                       ? const EdgeInsets.all(4.0)
                       : null,
-                  padding: !messageHasText &&
-                          hasAttachment &&
-                          attachmentType != AttachmentType.audio
-                      ? const EdgeInsets.symmetric(
-                          horizontal: 4.0,
-                          vertical: 2.0,
-                        )
-                      : null,
+                  padding:
+                      !messageHasText && hasAttachment && attachmentType != AttachmentType.audio
+                          ? const EdgeInsets.symmetric(
+                              horizontal: 4.0,
+                              vertical: 2.0,
+                            )
+                          : null,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -241,18 +223,11 @@ class _MessageCardState extends State<MessageCard>
                             true,
                             Platform.isIOS,
                           ),
-                          style: Theme.of(context)
-                              .custom
-                              .textTheme
-                              .caption
-                              .copyWith(
+                          style: Theme.of(context).custom.textTheme.caption.copyWith(
                                 fontSize: 11,
                                 color: messageHasText
-                                    ? colorTheme.textColor1
-                                        .withOpacity(0.9)
-                                        .withBlue(
-                                          Theme.of(context).brightness ==
-                                                  Brightness.dark
+                                    ? colorTheme.textColor1.withOpacity(0.9).withBlue(
+                                          Theme.of(context).brightness == Brightness.dark
                                               ? 255
                                               : 100,
                                         )
@@ -268,20 +243,12 @@ class _MessageCardState extends State<MessageCard>
                           'assets/images/${widget.message.status.value}.png',
                           color: widget.message.status.value != 'SEEN'
                               ? messageHasText
-                                  ? colorTheme.textColor1
-                                      .withOpacity(0.65)
-                                      .withBlue(Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? 255
-                                          : 150)
-                                  : Theme.of(context).brightness ==
-                                          Brightness.dark
+                                  ? colorTheme.textColor1.withOpacity(0.65).withBlue(
+                                      Theme.of(context).brightness == Brightness.dark ? 255 : 150)
+                                  : Theme.of(context).brightness == Brightness.dark
                                       ? Colors.white
-                                      : colorTheme.textColor1
-                                          .withOpacity(0.7)
-                                          .withBlue(
-                                            Theme.of(context).brightness ==
-                                                    Brightness.dark
+                                      : colorTheme.textColor1.withOpacity(0.7).withBlue(
+                                            Theme.of(context).brightness == Brightness.dark
                                                 ? 255
                                                 : 100,
                                           )
@@ -289,9 +256,9 @@ class _MessageCardState extends State<MessageCard>
                           width: 16.0,
                         ),
                       ],
-                      if (widget.special &&
-                          isSentMessageCard &&
-                          messageHasText) ...[const SizedBox(width: 9)],
+                      if (widget.special && isSentMessageCard && messageHasText) ...[
+                        const SizedBox(width: 9)
+                      ],
                     ],
                   ),
                 ),
@@ -317,8 +284,7 @@ class TriangleClipper extends CustomClipper<Path> {
       path.lineTo(size.width, 4);
       path.lineTo(size.width - 16, 16);
       path.lineTo(size.width - 16, size.height - 10);
-      path.quadraticBezierTo(
-          size.width - 16, size.height - 2, size.width - 36, size.height);
+      path.quadraticBezierTo(size.width - 16, size.height - 2, size.width - 36, size.height);
       path.lineTo(0, size.height);
     } else {
       path.lineTo(0, 4);

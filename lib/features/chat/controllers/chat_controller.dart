@@ -31,8 +31,7 @@ import '../../../shared/widgets/gallery.dart';
 import '../models/attachement.dart';
 import '../views/attachment_sender.dart';
 
-final chatControllerProvider =
-    StateNotifierProvider.autoDispose<ChatStateNotifier, ChatState>(
+final chatControllerProvider = StateNotifierProvider.autoDispose<ChatStateNotifier, ChatState>(
   (ref) => ChatStateNotifier(ref: ref),
 );
 
@@ -122,12 +121,10 @@ class ChatStateNotifier extends StateNotifier<ChatState> {
     final session = await AudioSession.instance;
     await session.configure(AudioSessionConfiguration(
       avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
-      avAudioSessionCategoryOptions:
-          AVAudioSessionCategoryOptions.allowBluetooth |
-              AVAudioSessionCategoryOptions.defaultToSpeaker,
+      avAudioSessionCategoryOptions: AVAudioSessionCategoryOptions.allowBluetooth |
+          AVAudioSessionCategoryOptions.defaultToSpeaker,
       avAudioSessionMode: AVAudioSessionMode.spokenAudio,
-      avAudioSessionRouteSharingPolicy:
-          AVAudioSessionRouteSharingPolicy.defaultPolicy,
+      avAudioSessionRouteSharingPolicy: AVAudioSessionRouteSharingPolicy.defaultPolicy,
       avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
       androidAudioAttributes: const AndroidAudioAttributes(
         contentType: AndroidAudioContentType.speech,
@@ -205,8 +202,7 @@ class ChatStateNotifier extends StateNotifier<ChatState> {
   }
 
   Future<void> onMicDragUp(double dy, double deviceHeight) async {
-    if (dy > deviceHeight - 100 ||
-        state.recordingState == RecordingState.recordingLocked) return;
+    if (dy > deviceHeight - 100 || state.recordingState == RecordingState.recordingLocked) return;
 
     setRecordingState(RecordingState.recordingLocked);
   }
@@ -316,12 +312,8 @@ class ChatStateNotifier extends StateNotifier<ChatState> {
   }
 
   void sendMessageWithAttachments(Message message) async {
-    if ({
-      AttachmentType.document,
-      AttachmentType.audio,
-      AttachmentType.voice,
-      AttachmentType.video
-    }.contains(message.attachment!.type)) {
+    if ({AttachmentType.document, AttachmentType.audio, AttachmentType.voice, AttachmentType.video}
+        .contains(message.attachment!.type)) {
       message.attachment!.uploadStatus = UploadStatus.preparing;
       await IsarDb.addMessage(message);
 
@@ -339,12 +331,12 @@ class ChatStateNotifier extends StateNotifier<ChatState> {
   }
 
   Future<void> uploadAttachment(Message message) async {
+    debugPrint("uploadAttachment(Message message) : ${message.attachment?.file ?? ""}");
     await UploadService.upload(
       taskId: message.id,
       file: message.attachment!.file!,
       path: 'attachments/${message.attachment!.fileName}',
-      onUploadDone: (snapshot) async =>
-          await uploadCompleteHandler(snapshot, message),
+      onUploadDone: (snapshot) async => await uploadCompleteHandler(snapshot, message),
       onUploadError: () async => await stopUpload(message),
     );
 
@@ -576,8 +568,7 @@ class ChatStateNotifier extends StateNotifier<ChatState> {
         final type = areDocuments
             ? AttachmentType.document
             : AttachmentType.fromValue(
-                lookupMimeType(file.path)?.split("/")[0].toUpperCase() ??
-                    'DOCUMENT',
+                lookupMimeType(file.path)?.split("/")[0].toUpperCase() ?? 'DOCUMENT',
               );
 
         double? width, height;
@@ -592,8 +583,7 @@ class ChatStateNotifier extends StateNotifier<ChatState> {
         return Attachment(
           type: type,
           url: "",
-          autoDownload:
-              type == AttachmentType.image || type == AttachmentType.voice,
+          autoDownload: type == AttachmentType.image || type == AttachmentType.voice,
           fileName: fileName,
           fileSize: await file.length(),
           fileExtension: fileName.split(".").last,

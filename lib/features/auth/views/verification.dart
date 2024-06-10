@@ -52,10 +52,8 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
 
     final resendTime = ref.watch(resendTimerControllerProvider);
     final colorTheme = Theme.of(context).custom.colorTheme;
-    final isTimerActive =
-        ref.watch(resendTimerControllerProvider.notifier).isTimerActive;
-    final multipleTimesSent =
-        ref.read(resendTimerControllerProvider.notifier).resendCount > 2;
+    final isTimerActive = ref.watch(resendTimerControllerProvider.notifier).isTimerActive;
+    final multipleTimesSent = ref.read(resendTimerControllerProvider.notifier).resendCount > 2;
 
     return Scaffold(
       appBar: AppBar(
@@ -68,9 +66,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: colorTheme.statusBarColor,
           statusBarIconBrightness:
-              Theme.of(context).brightness == Brightness.dark
-                  ? Brightness.light
-                  : Brightness.dark,
+              Theme.of(context).brightness == Brightness.dark ? Brightness.light : Brightness.dark,
           systemNavigationBarColor: colorTheme.navigationBarColor,
           systemNavigationBarDividerColor: colorTheme.navigationBarColor,
         ),
@@ -100,8 +96,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
                             style: TextStyle(color: colorTheme.textColor1),
                           )
                         : TextSpan(
-                            text:
-                                'Waiting to automatically detect an SMS sent to ',
+                            text: 'Waiting to automatically detect an SMS sent to ',
                             style: TextStyle(color: colorTheme.textColor1),
                           ),
                     TextSpan(
@@ -113,8 +108,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
                     ),
                     if (multipleTimesSent) ...[
                       TextSpan(
-                        text:
-                            'recently. Wait before requesting an SMS or a call with your code. ',
+                        text: 'recently. Wait before requesting an SMS or a call with your code. ',
                         style: TextStyle(color: colorTheme.textColor1),
                       )
                     ],
@@ -137,9 +131,7 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
             ),
             OTPField(
               onFilled: (value) {
-                ref
-                    .read(verificationControllerProvider)
-                    .onFilled(context, value, widget.phone);
+                ref.read(verificationControllerProvider).onFilled(context, value, widget.phone);
               },
             ),
             const SizedBox(
@@ -155,19 +147,16 @@ class _VerificationPageState extends ConsumerState<VerificationPage> {
             InkWell(
               onTap: isTimerActive
                   ? null
-                  : () =>
-                      ref.read(verificationControllerProvider).onResendPressed(
-                            context,
-                            widget.phone.rawNumber,
-                          ),
+                  : () => ref.read(verificationControllerProvider).onResendPressed(
+                        context,
+                        widget.phone.rawNumber,
+                      ),
               child: Text(
                 'Didn\'t receive code?',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
-                  color: isTimerActive
-                      ? colorTheme.greyColor
-                      : colorTheme.greenColor,
+                  color: isTimerActive ? colorTheme.greyColor : colorTheme.greenColor,
                 ),
               ),
             ),
@@ -216,7 +205,6 @@ class _OTPFieldState extends ConsumerState<OTPField> {
           letterSpacing: 4,
         ),
       ),
-      textScaler: MediaQuery.of(context).textScaler,
       maxLines: 1,
       textDirection: TextDirection.ltr,
     )..layout();
@@ -270,8 +258,7 @@ class _OTPFieldState extends ConsumerState<OTPField> {
                 int cursorPosition = selection.baseOffset;
 
                 if (value.length > 3 && !value.contains(' ')) {
-                  newValue =
-                      '${value.substring(0, 3)} ${value.substring(3, value.length)}';
+                  newValue = '${value.substring(0, 3)} ${value.substring(3, value.length)}';
                   cursorPosition++;
                 } else if (value.length == 4 && value.contains(' ')) {
                   newValue = value.substring(0, 3);

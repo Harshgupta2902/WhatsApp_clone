@@ -13,8 +13,7 @@ import '../../../shared/models/user.dart';
 const _resendFactor = 5;
 const _resendInitial = 60;
 
-final resendTimerControllerProvider =
-    AutoDisposeStateNotifierProvider<ResendTimerController, int>(
+final resendTimerControllerProvider = AutoDisposeStateNotifierProvider<ResendTimerController, int>(
   (ref) => ResendTimerController(ref),
 );
 
@@ -80,10 +79,8 @@ class VerificationController {
   void init(BuildContext context, String phoneNumber) async {
     final resendTime = SharedPref.instance.getInt('resendTime');
     final resendTimestamp =
-        int.parse(SharedPref.instance.getString('resendTimestamp') ?? '0') ~/
-            1000;
-    final elapsedTime =
-        DateTime.now().millisecondsSinceEpoch ~/ 1000 - resendTimestamp;
+        int.parse(SharedPref.instance.getString('resendTimestamp') ?? '0') ~/ 1000;
+    final elapsedTime = DateTime.now().millisecondsSinceEpoch ~/ 1000 - resendTimestamp;
     final remainingTime = (resendTime ?? 0) - elapsedTime;
 
     if (resendTime == null || remainingTime < 1) {
@@ -170,10 +167,7 @@ class VerificationController {
                 ),
                 Text(
                   text ?? 'Connecting',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(fontSize: 16.0),
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 16.0),
                 ),
               ],
             ),
@@ -222,8 +216,7 @@ class VerificationController {
                 text = 'Oops! an error occured';
 
                 if (snapshot.error.runtimeType == FirebaseAuthException) {
-                  final FirebaseAuthException error =
-                      snapshot.error as FirebaseAuthException;
+                  final FirebaseAuthException error = snapshot.error as FirebaseAuthException;
 
                   final msgs = {
                     'invalid-verification-code': 'Invalid OTP!',
@@ -259,10 +252,7 @@ class VerificationController {
                     ),
                     Text(
                       text ?? 'Connecting',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(fontSize: 16.0),
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 16.0),
                     ),
                   ],
                 ),

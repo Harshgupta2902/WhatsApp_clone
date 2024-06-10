@@ -88,10 +88,7 @@ class UserDetailsController extends StateNotifier<File?> {
     final colorTheme = Theme.of(context).custom.colorTheme;
     bool internetConnActive = await isConnected();
 
-    final username = ref
-        .read(userDetailsControllerProvider.notifier)
-        .usernameController
-        .text;
+    final username = ref.read(userDetailsControllerProvider.notifier).usernameController.text;
 
     String errorMsg = '';
     if (username.isEmpty) {
@@ -118,10 +115,8 @@ class UserDetailsController extends StateNotifier<File?> {
                 onPressed: () => Navigator.of(context).pop(),
                 child: Text(
                   'OK',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(color: colorTheme.greenColor),
+                  style:
+                      Theme.of(context).textTheme.bodySmall!.copyWith(color: colorTheme.greenColor),
                 ),
               ),
             ],
@@ -191,10 +186,7 @@ class UserDetailsController extends StateNotifier<File?> {
                     ),
                     Text(
                       text ?? 'Connecting',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(fontSize: 16.0),
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 16.0),
                     ),
                   ],
                 ),
