@@ -2,28 +2,6 @@
 
 This project brings you the **closest** experience to WhatsApp, crafted with the power of Flutter and Firebase. With features like real-time conversations, efficient media transmission, voice messaging, and robust security, we've recreated the essence of WhatsApp while adding our unique touch. Discover the familiarity you love, paired with exciting enhancements, all in one package.
 
-[🚀 **Try the latest release now!**](https://github.com/Tauseef-Hilal/WhatsUp/releases/tag/v0.1.1)
-
-## Watch The Video
-
-https://github.com/Tauseef-Hilal/WhatsUp/assets/67793598/3fd21809-5f38-4bd8-ab03-487556c4e915
-
-> **Note**: If the video is unplayable here, you can [**watch it on youtube**](https://youtu.be/SYPK5g2zr-A?si=W4MT1vmJ_uJS1LNA).
-
-## Screenshots
-
-Take a closer look to get to know about some of the app features
-
-<section>
-    <img src='screenshots/emoji.png?raw=true' alt='Emoji Picker' width='250px' />
-    <img src='screenshots/home.png?raw=true' alt='Home Page' width='250px' />
-    <img src='screenshots/chat.png?raw=true' alt='Chat Page' width='250px' />
-    <img src='screenshots/document.png?raw=true' alt='Document Upload' width='250px' />
-    <img src='screenshots/voice.png?raw=true' alt='Voice Chat' width='250px' />
-    <img src='screenshots/gallery.png?raw=true' alt='Gallery' width='250px' />
-</section>
-<br>
-
 > **Note**: If screenshots are not visible, you might need a VPN or a different WIFI
 
 ## Features That Shine

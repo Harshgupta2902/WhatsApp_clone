@@ -25,7 +25,7 @@ final contactPickerControllerProvider =
 );
 
 const shareMsg =
-    'Let\'s chat on WhatsApp! It\'s a fast, simple, and secure app we can use to message and call each other for free. Get it at https://github.com/Tauseef-Hilal/whatsapp-clone/releases/';
+    'Let\'s chat on WhatsApp! It\'s a fast, simple, and secure app we can use to message and call each other for free.';
 
 class ContactPickerController extends StateNotifier<List<Contact>> {
   late List<Contact> _contacts;

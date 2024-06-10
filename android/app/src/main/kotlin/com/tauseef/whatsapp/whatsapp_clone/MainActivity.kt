@@ -1,4 +1,4 @@
-package com.tauseef.whatsapp.whatsapp_clone
+package com.harsh.whatsapp
 
 import io.flutter.embedding.android.FlutterActivity
 
